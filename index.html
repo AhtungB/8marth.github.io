@@ -546,42 +546,35 @@
         let userName = '';
         let selectedFlowers = [];
 
-        function saveName() {
-    const nameInput = document.getElementById('userName');
-    const nameValue = nameInput.value.trim(); // Убираем лишние пробелы
-
-    // Проверяем, введено ли имя
-    if (!nameValue) {
-        alert('Пожалуйста, введите ваше имя 🌸');
-        return;
-    }
-
-    // Преобразуем имя: первая буква — заглавная, остальные — строчные
-    const capitalizedName = nameValue.charAt(0).toUpperCase() + nameValue.slice(1).toLowerCase();
-
-    // Сохраняем имя
-    userName = capitalizedName;
-
-    // Показываем следующую секцию
-    showSection('flower-section');
-
-    // Опционально: выводим имя в консоль для проверки
-    console.log('Имя пользователя:', userName);
-}
-
+        // Измененная функция выбора цветов
         function selectFlower(flowerName, element) {
-            element.classList.toggle('selected');
-            
-            if (selectedFlowers.includes(flowerName)) {
-                selectedFlowers = selectedFlowers.filter(f => f !== flowerName);
+            if (selectedFlowers.length < 3) {
+                selectedFlowers.push(flowerName);
+                element.classList.add('selected');
             } else {
-                if (selectedFlowers.length < 3) {
-                    selectedFlowers.push(flowerName);
+                const lastIndex = selectedFlowers.lastIndexOf(flowerName);
+                if (lastIndex !== -1) {
+                    selectedFlowers.splice(lastIndex, 1);
+                    if (!selectedFlowers.includes(flowerName)) {
+                        element.classList.remove('selected');
+                    }
                 } else {
-                    element.classList.remove('selected');
                     alert('Можно выбрать только 3 цветка 😊');
                 }
             }
+        }
+
+        function saveName() {
+            const nameInput = document.getElementById('userName');
+            const nameValue = nameInput.value.trim();
+
+            if (!nameValue) {
+                alert('Пожалуйста, введите ваше имя 🌸');
+                return;
+            }
+
+            userName = nameValue.charAt(0).toUpperCase() + nameValue.slice(1).toLowerCase();
+            showSection('flower-section');
         }
 
         function createBouquet() {
